@@ -1,0 +1,29 @@
+import {Ratelimit} from "@upstash/ratelimit";
+import {Redis} from "@upstash/redis";
+import { NextResponse } from "next/server";
+
+const redis = new Redis ({ 
+    url: 'https://us1-inviting-killdeer-38031.upstash.io', 
+    token: 'AZSPASQgZjFmMTZmNjEtM2ZhOS00MTFlLWJhNmItOWUxNDg4MTQ5NzUwZjQ0ZmE0ZjdmZTE4NGVkN2FjNzUyZDU4MTY3Y2Q5ODU=', 
+}) 
+
+// Create a new ratelimiter, that allows 5 requests per 5 seconds
+const ratelimit = new Ratelimit ({ 
+    redis: redis, 
+    limiter: Ratelimit.fixedWindow (1, "25 s"), 
+}); 
+
+export default async function handler (req) { 
+    // Use a constant string to limit all requests with a single ratelimit
+    // Or use a userID, apiKey or ip address for individual limits.
+    const ip = req.ip ?? '127.0.0.1'
+    const result = await ratelimit.limit(ip); 
+    if (!result) { 
+        console.log("rate limited");}
+    
+    // if (!result) { 
+    //     return new NextResponse ({status: 429, body: JSON.stringify({message: 'The request has been rate limited.', rateLimitState: result})}); 
+    // } 
+
+    // return new NextResponse ({status: 200, body: JSON.stringify({name: 'John Doe', rateLimitState: result})}); 
+}
