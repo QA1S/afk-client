@@ -5,12 +5,12 @@ import axios from "axios";
 
 const clientId = "b0a6ff9d-4aed-46ba-80ce-1547214fbaee";
 const CLIENT_SECRET = "hR40IVbuuIYuhyqpOzDuNL7bz7zFpUR8o1mkzvbAX7w";
-const redirectUri = "https://localhost/chat";
+const redirectUri = "https://afk-testing2.prepdoctors.online/chat";
 let flag = false;
 
 function ProtectedRoute ({children}) {
   const handleLogin = () => {
-    const authUrl = "http://localhost/chat";
+    const authUrl = "https://afk-testing2.prepdoctors.online/chat";
     window.location.replace(authUrl);
   };
   useEffect(() => {
@@ -33,7 +33,7 @@ function ProtectedRoute ({children}) {
         .then((response) => {
           console.log("response =", response);
           if (response.data["error_here"]){
-            window.location.replace("http://localhost/login");
+            window.location.replace("https://afk-testing2.prepdoctors.online/login");
           }else{
             flag = true;
             return children;
