@@ -47,6 +47,7 @@ export default function Form({ setMessages }) {
   const [message, setMessage] = useState("");
 
   const messageResponse = async () => {
+    try {
     const { data } = await axios.post("https://prepdoctors.online/afkgpt", {
       message: message,
       sessionid: session_id,
@@ -63,7 +64,9 @@ export default function Form({ setMessages }) {
     ]);
     session_id = data["sessionid"];
     // console.log(data['response'])
-  };
+  } catch (err){
+    console.log(err.response.status);
+  };}
 
   const sendMessage = async (e) => {
     e.preventDefault();
