@@ -72,7 +72,7 @@ export default function Form({ setMessages }) {
     } catch (err) {
       console.log("error");
       if (err.response.status === 401){
-      window.location.href = "http://localhost/error";
+      window.location.href = "https://afk-ai.prepdoctors.online/error";
 
       }
     }

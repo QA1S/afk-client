@@ -1,5 +1,5 @@
 const handleLogin = () => {
-  const authUrl = "http://localhost/login";
+  const authUrl = "https://afk-ai.prepdoctors.online/login";
   window.location.replace(authUrl);
 };
 
