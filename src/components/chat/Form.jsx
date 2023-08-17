@@ -5,6 +5,7 @@ import { formatRelative } from "date-fns";
 import { useState } from "react";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
+
 import { NextResponse } from "next/server";
 import { da } from "date-fns/locale";
 // import requestIp from 'request-ip';
@@ -48,25 +49,34 @@ export default function Form({ setMessages }) {
 
   const messageResponse = async () => {
     try {
-    const { data } = await axios.post("https://prepdoctors.online/afkgpt", {
-      message: message,
-      sessionid: session_id,
-      regenerate: regenerate,
-    },{ withCredentials:true});
-    // let client_ip = data.headers['x-forwarded-for'];
-    setMessages((prev) => [
-      ...prev,
-      {
-        msg: data["response"],
-        type: "bot",
-        time: formatRelative(new Date(), new Date()),
-      },
-    ]);
-    session_id = data["sessionid"];
-    // console.log(data['response'])
-  } catch (err){
-    console.log(err.response.status);
-  };}
+      const { data } = await axios.post(
+        "https://prepdoctors.online/afkgpt",
+        {
+          message: message,
+          sessionid: session_id,
+          regenerate: regenerate,
+        },
+        { withCredentials: true }
+      );
+      // let client_ip = data.headers['x-forwarded-for'];
+      setMessages((prev) => [
+        ...prev,
+        {
+          msg: data["response"],
+          type: "bot",
+          time: formatRelative(new Date(), new Date()),
+        },
+      ]);
+      session_id = data["sessionid"];
+      // console.log(data['response'])
+    } catch (err) {
+      console.log("error");
+      if (err.response.status === 401){
+      window.location.href = "http://localhost/error";
+
+      }
+    }
+  };
 
   const sendMessage = async (e) => {
     e.preventDefault();
@@ -126,22 +136,22 @@ export default function Form({ setMessages }) {
     } else {
       regenerate = true;
 
-    const { data } = await axios.post("https://prepdoctors.online/afkgpt", {
-      message: prev_message,
-      sessionid: session_id,
-      regenerate: regenerate,
-    });
-    setMessages((prev) => [
-      ...prev,
-      {
-        msg: data["response"],
-        type: "bot",
-        time: formatRelative(new Date(), new Date()),
-      },
-    ]);
-    regenerate = false;
+      const { data } = await axios.post("https://prepdoctors.online/afkgpt", {
+        message: prev_message,
+        sessionid: session_id,
+        regenerate: regenerate,
+      });
+      setMessages((prev) => [
+        ...prev,
+        {
+          msg: data["response"],
+          type: "bot",
+          time: formatRelative(new Date(), new Date()),
+        },
+      ]);
+      regenerate = false;
     }
-    
+
     // setMessages(prev => {
     //   // Create a copy of the previous messages array
     //   const updatedMessages = [...prev];
@@ -165,7 +175,6 @@ export default function Form({ setMessages }) {
     //   // Return the updated messages array
     //   // return updatedMessages;
     // });
-    
   };
 
   return (
