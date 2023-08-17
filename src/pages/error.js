@@ -22,13 +22,15 @@ const Error = () => {
       <div
         style={{
           position: "relative",
-          margin: "20px",
+          margin: "15px",
           padding: "10px",
           textAlign: "center",
         }}
       >
-        <h1>Error</h1>
-        <p>Invalid Credentials, please log in again</p>
+        <h1 style={{fontSize: "20px", fontWeight: "bold", textAlign: "center", margin: "0 auto"}}>Access Not Allowed</h1>
+        <p>Invalid Credentials, please log in again
+        </p>
+        <br />
         <button
           style={{
             color: "white",
@@ -40,6 +42,7 @@ const Error = () => {
             borderRadius: "10%",
           }}
           onClick={handleLogin}
+          className="hover:opacity-50 active:opacity-100"
         >
           Login
         </button>
