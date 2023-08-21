@@ -70,12 +70,35 @@ export default function Form({ setMessages }) {
       session_id = data["sessionid"];
       // console.log(data['response'])
     } catch (err) {
-      console.log("error");
       if (err.response.status === 401){
       window.location.href = "https://afk-ai.prepdoctors.online/error";
 
       }
-    }
+      else if (err.response.status === 429) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            msg: "You have exceeded the rate limit. Please try again later.",
+            type: "bot",
+            time: formatRelative(new Date(), new Date()),
+          },
+        ]);
+
+        setMessage("");
+        session_id = session_id;
+        return;
+      }
+      else if (err.response.status === 500) {
+        // return a popup saying that the server is down
+        setMessages((prev) => [
+          ...prev,
+          {
+            msg: "Sorry, it seems that the server is down. Please try again later.",
+            type: "bot",
+            time: formatRelative(new Date(), new Date()),
+          },
+        ]);
+    }}
   };
 
   const sendMessage = async (e) => {
