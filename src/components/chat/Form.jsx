@@ -98,7 +98,17 @@ export default function Form({ setMessages }) {
             time: formatRelative(new Date(), new Date()),
           },
         ]);
-    }}
+    }else if (err.response.status === 502) {
+      // return a popup saying that the server is down
+      setMessages((prev) => [
+        ...prev,
+        {
+          msg: "You have exceed the number of questions allowed.",
+          type: "bot",
+          time: formatRelative(new Date(), new Date()),
+        },
+      ])}
+  }
   };
 
   const sendMessage = async (e) => {
