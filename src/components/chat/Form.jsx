@@ -44,6 +44,7 @@ let session_id = "";
 let client_ip = "";
 let regenerate = false;
 let prev_message = "";
+let remaining = 0;
 export default function Form({ setMessages }) {
   const [message, setMessage] = useState("");
 
@@ -68,13 +69,12 @@ export default function Form({ setMessages }) {
         },
       ]);
       session_id = data["sessionid"];
+      remaining = data["remaining"];
       // console.log(data['response'])
     } catch (err) {
-      if (err.response.status === 401){
-      window.location.href = "https://afk-ai.prepdoctors.online/error";
-
-      }
-      else if (err.response.status === 429) {
+      if (err.response.status === 401) {
+        window.location.href = "https://afk-ai.prepdoctors.online/error";
+      } else if (err.response.status === 429) {
         setMessages((prev) => [
           ...prev,
           {
@@ -87,8 +87,7 @@ export default function Form({ setMessages }) {
         setMessage("");
         session_id = session_id;
         return;
-      }
-      else if (err.response.status === 500) {
+      } else if (err.response.status === 500) {
         // return a popup saying that the server is down
         setMessages((prev) => [
           ...prev,
@@ -98,17 +97,18 @@ export default function Form({ setMessages }) {
             time: formatRelative(new Date(), new Date()),
           },
         ]);
-    }else if (err.response.status === 502) {
-      // return a popup saying that the server is down
-      setMessages((prev) => [
-        ...prev,
-        {
-          msg: "You have exceed the number of questions allowed.",
-          type: "bot",
-          time: formatRelative(new Date(), new Date()),
-        },
-      ])}
-  }
+      } else if (err.response.status === 502) {
+        // return a popup saying that the server is down
+        setMessages((prev) => [
+          ...prev,
+          {
+            msg: "You have exceed the number of questions allowed.",
+            type: "bot",
+            time: formatRelative(new Date(), new Date()),
+          },
+        ]);
+      }
+    }
   };
 
   const sendMessage = async (e) => {
@@ -212,21 +212,36 @@ export default function Form({ setMessages }) {
 
   return (
     <div>
-      <div
-        style={{
-          display: "flex",
-          "justify-content": "center",
-          "align-items": "center",
-        }}
-      >
-        {message.length}/150
+      {/* <div style={{ display: "flex", "justify-content": "space-between" }}>
+        <p style={{ margin: "0" }}>This text is on the far left</p>
+        <button style={{ margin: "0 auto" }}>
+          This button is in the middle
+        </button>
+        <p style={{ margin: "0", "text-align": "right" }}>
+          This text is on the far right
+        </p>
+      </div> */}
+      <div style={{ display: "flex", "justify-content": "space-between" }}>
+        <p className="text-white text-sm" style={{ margin: "0" }}>
+          Allowed Questions: {remaining}/100
+        </p>
         <button
           type="submit"
           onClick={regenerate_ans}
           className="mr-2 bg-white hover:opacity-50 active:opacity-100 transition-colors py-2 px-3 rounded-xl"
+          style={{
+            // "justify-content": "center",
+            // "align-items": "center",
+            margin: "0"
+          }}
         >
           Regenerate Response
         </button>
+        <p className="text-white text-sm" style={{ margin: "0", "text-align": "right" }}>
+          {message.length}/150
+        </p>
+
+       
       </div>
       <form className="relative flex items-center">
         <input
