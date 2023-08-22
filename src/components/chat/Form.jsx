@@ -48,19 +48,13 @@ let remaining;
 export default function Form({ setMessages }) {
   const [message, setMessage] = useState("");
   
-  // useEffect(() => {
-     axios.post(
+  useEffect(() => {
+     const {respon} = axios.post(
           "https://prepdoctors.online/api/allowedq",{sessionid: session_id,},
           { withCredentials: true }
-        ).then((response) => {
-          console.log("response =", response);
-          remaining = response.data["remaining"];
-        })
-        .catch((error) => {
-          console.error("error getting balance", error);
-        });
-    
-  // },[]); 
+        );
+        remaining = respon["remaining"];
+  },[]); 
 
   const messageResponse = async () => {
     try {
