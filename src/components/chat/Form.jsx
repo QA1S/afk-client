@@ -44,9 +44,23 @@ let session_id = "";
 let client_ip = "";
 let regenerate = false;
 let prev_message = "";
-let remaining = 0;
+let remaining;
 export default function Form({ setMessages }) {
   const [message, setMessage] = useState("");
+  
+  // useEffect(() => {
+     axios.post(
+          "https://prepdoctors.online/api/allowedq",{sessionid: session_id,},
+          { withCredentials: true }
+        ).then((response) => {
+          console.log("response =", response);
+          remaining = response.data["remaining"];
+        })
+        .catch((error) => {
+          console.error("error getting balance", error);
+        });
+    
+  // },[]); 
 
   const messageResponse = async () => {
     try {
@@ -183,6 +197,7 @@ export default function Form({ setMessages }) {
         },
       ]);
       regenerate = false;
+      remaining = data["remaining"];
     }
 
     // setMessages(prev => {
