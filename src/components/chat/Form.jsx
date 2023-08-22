@@ -48,13 +48,13 @@ let remaining;
 export default function Form({ setMessages }) {
   const [message, setMessage] = useState("");
   
-  useEffect(() => {
+  // useEffect(() => {/
      const {respon} = axios.post(
           "https://prepdoctors.online/api/allowedq",{sessionid: session_id,},
           { withCredentials: true }
         );
         remaining = respon["remaining"];
-  },[]); 
+  // },[]); 
 
   const messageResponse = async () => {
     try {
