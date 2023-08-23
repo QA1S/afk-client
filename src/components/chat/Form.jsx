@@ -50,10 +50,12 @@ export default function Form({ setMessages }) {
   
   // useEffect(() => {/
   const get_balance = async () => {   
-    const {respon} = await axios.post(
+    const { respon } = await axios.post(
           "https://prepdoctors.online/api/allowedq",{sessionid: session_id,},
           { withCredentials: true }
         );
+        console.log(respon);
+        console.log(respon["remaining"]);
     remaining = respon["remaining"];
   // },[]); 
   };
