@@ -2,7 +2,7 @@ import { data } from "autoprefixer";
 import axios from "axios";
 
 import { formatRelative } from "date-fns";
-import { useState } from "react";
+import { use, useState } from "react";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 
@@ -50,14 +50,17 @@ export default function Form({ setMessages }) {
   
   // useEffect(() => {/
   const get_balance = async () => {   
-  const {respon} = await axios.post(
+    const {respon} = await axios.post(
           "https://prepdoctors.online/api/allowedq",{sessionid: session_id,},
           { withCredentials: true }
         );
-        remaining = respon["remaining"];
+    remaining = respon["remaining"];
   // },[]); 
   };
-  get_balance();
+  useEffect(() => {
+    get_balance();  
+  }, []);
+  
   const messageResponse = async () => {
     try {
       const { data } = await axios.post(
