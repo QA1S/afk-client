@@ -44,23 +44,21 @@ let session_id = "";
 let client_ip = "";
 let regenerate = false;
 let prev_message = "";
-let remaining;
+// var remaining;
 export default function Form({ setMessages }) {
   const [message, setMessage] = useState("");
-  
-  // useEffect(() => {/
-  const get_balance = async () => {   
-    const { respon } = await axios.post(
-          "https://prepdoctors.online/api/allowedq",{sessionid: session_id,},
-          { withCredentials: true }
-        );
-        console.log(respon);
-        console.log(respon["remaining"]);
-    remaining = respon["remaining"];
-  // },[]); 
-  };
+  var [remaining, setRemaining] = useState(null);
+
   useEffect(() => {
-    get_balance();  
+    axios
+      .post(
+        "https://prepdoctors.online/api/allowedq",
+        {},
+        { withCredentials: true }
+      )
+      .then((response) => {
+        setRemaining(response.data["remaining"]);
+      });
   }, []);
 
   const messageResponse = async () => {
@@ -248,16 +246,17 @@ export default function Form({ setMessages }) {
           style={{
             // "justify-content": "center",
             // "align-items": "center",
-            margin: "0"
+            margin: "0",
           }}
         >
           Regenerate Response
         </button>
-        <p className="text-white text-sm" style={{ margin: "0", "text-align": "right" }}>
+        <p
+          className="text-white text-sm"
+          style={{ margin: "0", "text-align": "right" }}
+        >
           {message.length}/150
         </p>
-
-       
       </div>
       <form className="relative flex items-center">
         <input
