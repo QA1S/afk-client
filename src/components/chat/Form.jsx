@@ -82,7 +82,7 @@ export default function Form({ setMessages }) {
         },
       ]);
       session_id = data["sessionid"];
-      remaining = data["remaining"];
+      setRemaining(data["remaining"]);
       // console.log(data['response'])
     } catch (err) {
       if (err.response.status === 401) {
@@ -196,7 +196,7 @@ export default function Form({ setMessages }) {
         },
       ]);
       regenerate = false;
-      remaining = data["remaining"];
+      setRemaining(data["remaining"]);
     }
 
     // setMessages(prev => {
