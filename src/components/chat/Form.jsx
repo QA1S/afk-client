@@ -2,7 +2,7 @@ import { data } from "autoprefixer";
 import axios from "axios";
 
 import { formatRelative } from "date-fns";
-import { use, useState } from "react";
+import { use, useState, useEffect } from "react";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 
@@ -39,7 +39,7 @@ const SendIcon = (props) => (
     />
   </svg>
 );
-let limit = 0;
+
 let session_id = "";
 let client_ip = "";
 let regenerate = false;
@@ -60,7 +60,7 @@ export default function Form({ setMessages }) {
   useEffect(() => {
     get_balance();  
   }, []);
-  
+
   const messageResponse = async () => {
     try {
       const { data } = await axios.post(
